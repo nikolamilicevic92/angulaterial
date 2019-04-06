@@ -1,0 +1,28 @@
+nav {
+    background-color: #673AB7;
+    box-shadow: 0 0 10px gray;
+}
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    max-width: 1200px;
+}
+a.nav-link {
+    display: block;
+    padding: 0 15px;
+    height: 50px;
+    line-height: 50px;
+    color: rgb(211, 211, 211);
+    text-decoration: none;
+    transition: color 0.3s ease-out;
+    cursor: pointer;
+}
+mat-icon {
+    position: relative;
+    top: 5px;
+    margin-right: 3px;
+}
+a.nav-link:hover {
+    color: white;
+}

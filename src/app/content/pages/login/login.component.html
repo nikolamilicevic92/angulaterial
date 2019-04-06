@@ -1,0 +1,43 @@
+<!-- We need to bind to formGroup property and listen for ngSubmit event -->
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+  <div class="form-group">
+    <!-- Mat form field is angular material wrapper around inputs -->
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <!-- Remember to put matInput directive to inputs and textareas -->
+      <!-- Each form field must have its formControl -->
+      <input 
+        type="text" matInput autocomplete="new-email"
+        [formControl]="form.get('email')"
+      >
+      <!-- Mat hint is optional and will be displayed underneath the input -->
+      <mat-hint>Email address is that thingy with the @ symbol</mat-hint>
+      <!-- Mat error will be displayed if input is invalid and touched -->
+      <!-- This is very common scenario where input can have 2 errors -->
+      <mat-error *ngIf="form.get('email').hasError('email') && !form.get('email').hasError('required')">
+        Invalid email address
+      </mat-error>
+      <mat-error *ngIf="form.get('email').hasError('required')">Email is required</mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="form-group">
+    <mat-form-field>
+      <mat-label>Password</mat-label>
+      <input 
+        type="password" matInput autocomplete="off"
+        [formControl]="form.get('password')"
+      >
+      <mat-error *ngIf="form.get('password').hasError('minLength') && !form.get('password').hasError('required')">
+        Password is too short
+      </mat-error>
+      <mat-error *ngIf="form.get('password').hasError('required')">Password is required</mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="form-group">
+    <button type="submit" mat-raised-button color="primary">Submit</button>
+  </div>
+
+</form>

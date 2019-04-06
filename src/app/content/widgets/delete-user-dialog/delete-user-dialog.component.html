@@ -1,0 +1,10 @@
+<div class="dialog-container">
+  <div class="dialog-title">Delete {{ data.user.name }}</div>
+  <div class="dialog-content">
+    Are you sure you want to delete {{ data.user.name }}?
+  </div>
+  <div class="dialog-actions">
+    <button (click)="delete()" mat-button color="primary" class="mr-1">Delete</button>
+    <button (click)="cancel()" mat-button>Cancel</button>
+  </div>
+</div>

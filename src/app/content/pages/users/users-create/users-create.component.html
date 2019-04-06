@@ -1,0 +1,150 @@
+<!-- Form has an input property 'formGroup' to which we bind form we create in component -->
+<!-- Unlike regular html form that has onsubmit event, in angular the event is ngSubmit -->
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <mat-form-field>
+          <mat-label>Name *</mat-label>
+          <!-- Here's how we can add autocomplete options to an input -->
+          <!-- We create mat-autocomplete and a local template variable that will reference it -->
+          <!-- To create a template variable we use '#variableName' as element's attribute -->
+          <!-- Input has a matAutocomplete property to which we'll bind the autocomplete reference -->
+          <input 
+            type="text" (keyup)="filterAutocomplete($event.target.value)" 
+            matInput [matAutocomplete]="autocomplete" autocomplete="off"
+            [formControl]="form.get('name')"
+          >
+          <mat-autocomplete #autocomplete="matAutocomplete">
+            <mat-option [value]="name" *ngFor="let name of namesAutocomplete">
+              {{ name }}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="form.get('name').hasError('minlength') && !form.get('name').hasError('required')">
+            Name is too short
+          </mat-error>
+          <mat-error *ngIf="form.get('name').hasError('required')">
+            Name is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <mat-form-field>
+          <mat-label>Email *</mat-label>
+          <input 
+            type="text" matInput [formControl]="form.get('email')" autocomplete="new-email"
+          >
+          <mat-error *ngIf="form.get('email').hasError('email') && !form.get('email').hasError('required')">
+            Please enter a valid email address
+          </mat-error>
+          <mat-error *ngIf="form.get('email').hasError('required')">
+            Email is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <mat-form-field>
+          <mat-label>Website *</mat-label>
+          <input 
+            type="text" matInput [formControl]="form.get('website')" autocomplete="off"
+          >
+          <mat-error *ngIf="form.get('website').hasError('pattern') && !form.get('website').hasError('required')">
+            Please enter a valid URL
+          </mat-error>
+          <mat-error *ngIf="form.get('website').hasError('required')">
+            Website is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <mat-form-field>
+          <mat-label>Fruits *</mat-label>
+          <!-- Multi selection input, similar to <select multiple> element in html -->
+          <mat-select [formControl]="form.get('fruits')" multiple>
+            <mat-option *ngFor="let fruit of fruits" [value]="fruit">
+              {{ fruit }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.get('fruits')">
+            Fruits are required
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <mat-form-field>
+          <mat-label>Date of birth *</mat-label>
+          <!-- Input has a matDatepicker property to which we can bind a datepicker reference -->
+          <input 
+            matInput [matDatepicker]="picker" autocomplete="off"
+            [formControl]="form.get('date_of_birth')"
+          >
+          <!-- By binding datepicker reference to 'for' property, whenever we click on toggle -->
+          <!-- the datepicker will open. matSuffix is a directive that will place an element
+               at the end of input -->
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <!-- Datepicker is not visible by default, it will be opened by toggle above -->
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="form.get('date_of_birth').hasError('required')">
+            Date of birth is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <mat-form-field>
+          <mat-label>City *</mat-label>
+          <!-- Angular equivalent of html 'select' element -->
+          <mat-select [formControl]="form.get('city')">
+            <mat-option *ngFor="let city of cities" [value]="city">
+              {{ city }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.get('city')">
+            City is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <!-- Angular's equivalent of html <input type="radio" elements> -->
+        <label style="position: relative; bottom: 3px; margin-right: 15px; font-size: 16px;">Gender</label>
+        <mat-radio-group [formControl]="form.get('gender')">
+          <mat-radio-button color="primary" value="male">Male</mat-radio-button>
+          &nbsp;
+          <mat-radio-button color="primary" value="female">Female</mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <mat-checkbox 
+          color="primary"
+          [formControl]="form.get('terms')">
+          I accept the terms and conditions
+        </mat-checkbox>
+        <mat-error *ngIf="submited && form.get('terms').hasError('required')">
+          You need to agree on terms and conditions
+        </mat-error>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <button type="submit" mat-raised-button color="primary">Submit</button>
+  </div>
+</form>

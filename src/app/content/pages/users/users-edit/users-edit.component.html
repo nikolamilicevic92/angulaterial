@@ -1,0 +1,52 @@
+<!-- Form has an input property 'formGroup' to which we bind form we create in component -->
+<!-- Unlike regular html form that has onsubmit event, in angular the event is ngSubmit -->
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <mat-form-field>
+          <mat-label>Name *</mat-label>
+          <!-- Here's how we can add autocomplete options to an input -->
+          <!-- We create mat-autocomplete and a local template variable that will reference it -->
+          <!-- To create a template variable we use '#variableName' as element's attribute -->
+          <!-- Input has a matAutocomplete property to which we'll bind the autocomplete reference -->
+          <input 
+            type="text" (keyup)="filterAutocomplete($event.target.value)" 
+            matInput [matAutocomplete]="autocomplete" autocomplete="off"
+            [formControl]="form.get('name')"
+          >
+          <mat-autocomplete #autocomplete="matAutocomplete">
+            <mat-option [value]="name" *ngFor="let name of namesAutocomplete">
+              {{ name }}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="form.get('name').hasError('minlength') && !form.get('name').hasError('required')">
+            Name is too short
+          </mat-error>
+          <mat-error *ngIf="form.get('name').hasError('required')">
+            Name is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <mat-form-field>
+          <mat-label>Email *</mat-label>
+          <input 
+            type="text" matInput [formControl]="form.get('email')" autocomplete="new-email"
+          >
+          <mat-error *ngIf="form.get('email').hasError('email') && !form.get('email').hasError('required')">
+            Please enter a valid email address
+          </mat-error>
+          <mat-error *ngIf="form.get('email').hasError('required')">
+            Email is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <button type="submit" mat-raised-button color="primary">Submit</button>
+  </div>
+</form>

@@ -1,0 +1,96 @@
+<div class="mb-3 clearfix">
+
+  <mat-form-field>
+    <mat-label>Filter</mat-label>
+    <!-- #someName is like giving element an id (id="someName") -->
+    <!-- We can then fetch the input inside component with @ViewChild() filter -->
+    <!-- That would be like using document.getElementById('filter') -->
+    <input type="text" matInput #filter>
+    <!-- By adding matSuffix directive to elements inside mat-form-field they
+    will be placed at the end of input. Similarly we can use matPrefix
+    to place an element at the start of an input. -->
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+
+  <!-- routerLink in Angular is like href attribute in regular html -->
+  <!-- We can still use href for external links, but for internal routing we use routerLink -->
+  <a routerLink="/users/create" class="float-right">
+    <button mat-raised-button color="primary">Create</button>
+  </a>
+
+</div>
+
+<table 
+  mat-table [dataSource]="dataSource" class="mat-elevation-z8"
+  matSort matSortActive="id" matSortDirection="asc">
+
+  <!-- Columns can be defined in any order. The actual order in which they are
+  displayed depends on the displayedColumns array inside component -->
+
+  <!-- We always use matColumnDef directive on ng-container and assign 
+      elements from displayedColumns array to it -->
+  <ng-container matColumnDef="id">
+    <!-- <th> always has mat-header-cell directive and *matHeaderCellDef -->
+    <!-- If we want to emit sort event with this column we can add mat-sort-header directive -->
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
+    td always has mat-cell 
+    <!-- <td> always has mat-cell and *matCellDef directives. To *matCellDef we always bind
+         the following syntax 'let variableName' to get access to current row object -->
+    <td mat-cell *matCellDef="let user"> {{ user.id }} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+    <td mat-cell *matCellDef="let user">{{ user.name }} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="email">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+    <td mat-cell *matCellDef="let user"> {{ user.email }} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="city">
+    <th mat-header-cell *matHeaderCellDef>City</th>
+    <td mat-cell *matCellDef="let user">{{ user.address.city }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="website">
+    <th mat-header-cell *matHeaderCellDef>Website</th>
+    <td mat-cell *matCellDef="let user">{{ user.website }}</td>
+  </ng-container>
+
+  <!-- Usually the last column is some dropdown menu with edit/delete actions -->
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let user">
+      <!-- This will be a trigger for the menu bellow -->
+      <button mat-icon-button [matMenuTriggerFor]="appMenu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <!-- Dropdown menu -->
+      <mat-menu #appMenu="matMenu" xPosition="before">
+        <button mat-menu-item (click)="editUser(user)">
+          <mat-icon color="primary">create</mat-icon>
+          <span>Edit</span>
+        </button>
+        <button mat-menu-item (click)="deleteUser(user)">
+          <mat-icon color="warn">delete</mat-icon>
+          <span>Delete</span>
+        </button>
+      </mat-menu>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+<div style="height:20px;">
+  <mat-progress-bar mode="indeterminate" *ngIf="dataSource.loading$ | async"></mat-progress-bar>
+</div>
+<div>
+  <mat-paginator 
+    [pageSize]="10" [pageSizeOptions]="[10, 25, 50]" 
+    [length]="dataSource.paginatorTotal$ | async" 
+    [showFirstLastButtons]="true">
+  </mat-paginator>
+</div>

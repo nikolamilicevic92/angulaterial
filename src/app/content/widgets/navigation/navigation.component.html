@@ -1,0 +1,18 @@
+<nav>
+  <ul class="clearfix">
+    <li 
+      *ngFor="let route of routes" class="float-left">
+      <a [routerLink]="route.url" class="nav-link">
+        <!-- Material icons -->
+        <mat-icon>{{ route.icon }}</mat-icon>
+        <span class="title">{{ route.title }}</span>
+      </a>
+    </li>
+    <li *ngIf="authService.loggedIn" class="float-right">
+      <a (click)="logout()" class="nav-link">
+        <mat-icon>power_settings_new</mat-icon>
+        <span class="title">Logout</span>
+      </a>
+    </li>
+  </ul>
+</nav>
